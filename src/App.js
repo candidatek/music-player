@@ -1,19 +1,21 @@
 import Song from "./Components/Song";
-import React , {useState, useRef} from "react"; 
+import React , {useState, useRef, Component} from "react"; 
 import Player from "./Components/Player";
 import "./styles/app.scss";
 import data from "./data";
 import Library from "./Components/Library";
 import Nav from "./Components/Nav";
-import { faMusic } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+//import { faMusic } from "@fortawesome/free-solid-svg-icons";
 
 
 function App() {
 
   //Reference
   const audioRef = useRef(null);
+  const libraryQueueRef = useRef(null);
   const [songs , setSongs] = useState(data());
-  const [currentSong, setCurrentSong] = useState(songs[0]);
+  const [currentSong, setCurrentSong] = useState(songs[6]);
   const [isPlaying , setIsPlaying] = useState(false);
   const [libraryStatus ,setLibraryStatus] = useState(false);
 
@@ -39,22 +41,37 @@ function App() {
         await setCurrentSong(songs[(currentIndex + 1) % songs.length ]);
         if(isPlaying) audioRef.current.play();
     }
-    // const onKeyDown =(e) => {
-    //   console.log("space");
-    //   if(e.keyCode === 32){
-    //     if(isPlaying)
-    //         audioRef.current.pause();
-    //     else if(!isPlaying)
-    //         audioRef.current.play();
-    //     setIsPlaying(!isPlaying);   
-    //   }
-    // }
+    const playPauseHandler = async () => {
+      console.log(audioRef);
+      if(audioRef !== null){
+        audioRef.current.play();
+      if(isPlaying) audioRef.current.play();
+      setIsPlaying(!isPlaying);
+      if(!isPlaying) audioRef.current.pause();
+      setIsPlaying(!isPlaying);
+      }
+    }
+    
+
+    const _onKeyDown = async (e) => {
+      if(e.keyCode === 81){
+        setLibraryStatus(!libraryStatus);
+      }
+      else if(e.keyCode === 27) {
+        if(libraryStatus)
+          setLibraryStatus(!libraryStatus);
+      }
+      
+    }
+  document.addEventListener('keydown', _onKeyDown);
 
   return (
-    <div className={`App ${libraryStatus ? 'library-active' : ''}`}>
+    <div className={`App ${libraryStatus ? 'library-active' : ''}`} >
       <Nav
       libraryStatus={libraryStatus}
       audioRef={audioRef}
+      libraryQueueRef={libraryQueueRef}
+      onKeyDown={_onKeyDown}
       setLibraryStatus={setLibraryStatus} />
 
       <Song currentSong={currentSong} />

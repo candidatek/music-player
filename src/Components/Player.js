@@ -2,8 +2,9 @@ import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay ,faAngleLeft , faAngleRight ,faPause} from '@fortawesome/free-solid-svg-icons';
 
+
 const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef, songInfo, setSongInfo , setCurrentSong}) => {
-  
+    
     const getTime = (time) => {
         return (
             Math.floor(time/60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
@@ -67,7 +68,6 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
     const trackAnim = {
         transform: `translateX(${songInfo.animationPercentage}%)`
     };
-
     return (
         <div className="player">   
             <div className="time-control">
@@ -86,24 +86,32 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
             </div>
 
        <div className="play-control">
+           <div tabIndex="0" 
+           aria-label="skip back"
+           role="button">
                 <FontAwesomeIcon 
                 className="skip-back"  
                 size="2x" 
                 onClick={() => skipTrackHandler('skip-back')}
-                tabIndex="0" 
                 icon={faAngleLeft}/>   
-
+            </div>
+            <div tabIndex="0" 
+            aria-label={`${isPlaying ? "Pause" : "Play"}`} 
+            role="button">
                 <FontAwesomeIcon 
                 onClick={playSongHandler}
                 className="play" 
-                size="2x" tabIndex="0"
+                size="2x" 
                 icon={isPlaying ? faPause : faPlay}/>
+            </div>
 
+            <div tabIndex="0" aria-label="skip-fordward" role="button">
                 <FontAwesomeIcon 
                 className="skip-fordward"  
                 onClick={() => skipTrackHandler('skip-fordward')}
-                size="2x" tabIndex="0" 
+                size="2x" 
                 icon={faAngleRight}/>
+            </div>
             </div>
         </div>
     );

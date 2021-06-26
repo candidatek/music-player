@@ -10,6 +10,7 @@ const Library = ({songs , setCurrentSong, audioRef,isPlaying,setSongs , libraryS
                 <LibrarySong 
                 setSongs={setSongs}
                 id={song.id} 
+                libraryStatus={libraryStatus}
                 isPlaying ={ isPlaying}
                 key={song.id}
                 audioRef={audioRef}

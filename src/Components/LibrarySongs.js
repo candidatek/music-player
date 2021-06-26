@@ -1,6 +1,7 @@
+import { library } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 
-const LibrarySong = ({songs, song , setCurrentSong ,id, audioRef, isPlaying,setSongs}) => {
+const LibrarySong = ({songs, song , setCurrentSong ,id, audioRef, isPlaying,setSongs , libraryStatus}) => {
     const songSelectHandler = async () => {
         await setCurrentSong(song);
         // add active state
@@ -24,8 +25,9 @@ const LibrarySong = ({songs, song , setCurrentSong ,id, audioRef, isPlaying,setS
       
     }
     return (
-        <div tabIndex="0">
+        <button tabIndex={`${libraryStatus ? "0" : "-1"}`}>
         <div className={`library-song ${song.active ? "selected" : ""}`} 
+
         onClick={songSelectHandler} >   
         <img alt={"image " + song.name} src={song.cover}></img>
         <div className="song-description">
@@ -33,7 +35,7 @@ const LibrarySong = ({songs, song , setCurrentSong ,id, audioRef, isPlaying,setS
             <h4>{song.artist}</h4>
         </div>
         </div>
-        </div>
+        </button>
     );
 }
 
