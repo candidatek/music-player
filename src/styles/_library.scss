@@ -33,10 +33,14 @@ button {
     img {
         width: 30%;
     }
-&:hover {
+    &:hover {
     background-color: rgb(232, 241, 253);
     transition: background 0.5s ease;
-}
+    }
+    &:focus{
+    border:1px solid #7a7a7a;
+    }
+    
 }
 
 .song-description{
@@ -64,8 +68,9 @@ button {
     border:transparent;
 }
 .selected {
-    background: rgba(185, 202, 246, 0.863);
+    background: rgba(202, 216, 253, 0.863);
 }
+
 
 .active-library {
     transform: translateX(0%);

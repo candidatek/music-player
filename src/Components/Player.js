@@ -10,6 +10,11 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
             Math.floor(time/60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
         );
     };
+
+    const _onKeyDown = (e) => {
+        console.log(e);
+        e.stopPropogation();
+    }
     //Event handlers
     const playSongHandler = () => {
         audioRef.current.play();
@@ -55,8 +60,9 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
         if(direction === 'skip-back'){
             if((currentIndex -1) % totalSongs === -1){
                 await setCurrentSong(songs[totalSongs - 1]);
-                activeLibraryHandler(songs[(currentIndex - 1) % totalSongs ]);
+                activeLibraryHandler(songs[(totalSongs - 1)]);
                 if(isPlaying) audioRef.current.play();
+                audioRef.current.focus();
                 return;
             }
             await setCurrentSong(songs[Math.abs((currentIndex - 1)) % totalSongs ])
@@ -64,6 +70,21 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
         }
         if(isPlaying) audioRef.current.play();
     };
+    const _onKeyPressSkipBack =(e) => {
+        if(e.code === "Enter"){
+            skipTrackHandler('skip-back');
+        }
+    }
+    const _onKeyPressSkipFrodward= (e) => {
+        if(e.code === "Enter"){
+            skipTrackHandler('skip-fordward');
+        }
+    }
+    const playPauseKeyHandler= (e) => {
+        if(e.code === "Enter"){
+            playSongHandler();
+        }
+    }
 // add the styles
     const trackAnim = {
         transform: `translateX(${songInfo.animationPercentage}%)`
@@ -87,6 +108,7 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
 
        <div className="play-control">
            <div tabIndex="0" 
+           onKeyPress={_onKeyPressSkipBack}
            aria-label="skip back"
            role="button">
                 <FontAwesomeIcon 
@@ -96,16 +118,21 @@ const Player = ({currentSong,songs ,setSongs, isPlaying ,setIsPlaying, audioRef,
                 icon={faAngleLeft}/>   
             </div>
             <div tabIndex="0" 
+            onKeyPress={playPauseKeyHandler}
             aria-label={`${isPlaying ? "Pause" : "Play"}`} 
             role="button">
                 <FontAwesomeIcon 
                 onClick={playSongHandler}
+                onKeyPress={_onKeyDown}
                 className="play" 
                 size="2x" 
                 icon={isPlaying ? faPause : faPlay}/>
             </div>
 
-            <div tabIndex="0" aria-label="skip-fordward" role="button">
+            <div tabIndex="0" 
+            aria-label="skip-fordward" 
+            onKeyPress={_onKeyPressSkipFrodward}
+            role="button">
                 <FontAwesomeIcon 
                 className="skip-fordward"  
                 onClick={() => skipTrackHandler('skip-fordward')}
